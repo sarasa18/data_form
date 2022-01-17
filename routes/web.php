@@ -20,9 +20,15 @@ Route::group(['prefix' => 'data', 'middleware' => 'auth'], function () {
     Route::get('index', 'DataFormController@index')->name('data.index');
     Route::get('create', 'DataFormController@create')->name('data.create');
     Route::post('store', 'DataFormController@store')->name('data.store');
+    Route::get('show/{id}', 'DataFormController@show')->name('data.show');
+    Route::get('edit/{id}', 'DataFormController@edit')->name('data.edit');
+    Route::post('update/{id}', 'DataFormController@update')->name('data.update');
+    Route::post('destroy/{id}', 'DataFormController@destroy')->name('data.destroy');
 });
+
+Route::get('shops/index', 'ShopController@index');
 
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'DataFormController@index')->name('home');

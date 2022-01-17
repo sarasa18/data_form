@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Models\DataForm;
 use Illuminate\Support\Facades\DB;
+//フォームチェックデータ
+use App\Services\CheckFormData;
+//バリデーション
+use App\Http\Requests\StoreDataForm;
 
 class DataFormController extends Controller
 {
@@ -35,6 +39,10 @@ class DataFormController extends Controller
             $search_split2 = preg_split('/[\s]+/', $search_split, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($search_split2 as $value) {
                 $query->where('your_name', 'like', '%' . $value . '%');
+                $query->orWhere('id', 'like', '%' . $value . '%');
+                $query->orWhere('title', 'like', '%' . $value . '%');
+                $query->orWhere('contact', 'like', '%' . $value . '%');
+                $query->orWhere('email', 'like', '%' . $value . '%');
             }
         }
 
@@ -62,7 +70,7 @@ class DataFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDataForm $request)
     {
         $data = new DataForm();
 
@@ -86,7 +94,13 @@ class DataFormController extends Controller
      */
     public function show($id)
     {
-        //
+        $pickdata = DataForm::find($id);
+
+        $gender = CheckFormData::checkGender($pickdata);
+        $age = CheckFormData::checkAge($pickdata);
+
+
+        return view('data.show', compact('pickdata', 'gender', 'age'));
     }
 
     /**
@@ -97,7 +111,9 @@ class DataFormController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pickdata = DataForm::find($id);
+
+        return view('data.edit', compact('pickdata'));
     }
 
     /**
@@ -109,7 +125,18 @@ class DataFormController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $pickdata = DataForm::find($id);
+
+        $pickdata->your_name = $request->input('your_name');
+        $pickdata->title = $request->input('title');
+        $pickdata->email = $request->input('email');
+        $pickdata->url = $request->input('url');
+        $pickdata->gender = $request->input('gender');
+        $pickdata->age = $request->input('age');
+        $pickdata->contact = $request->input('contact');
+
+        $pickdata->save();
+        return redirect('data/index');
     }
 
     /**
@@ -120,6 +147,9 @@ class DataFormController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pickdata = DataForm::find($id);
+        $pickdata->delete();
+
+        return redirect('data/index');
     }
 }

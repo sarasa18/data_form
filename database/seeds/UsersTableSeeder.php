@@ -16,19 +16,19 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'あああ',
                 'email' => 'test@test.com',
-                'password' => 'tttttttt'
+                'password' => Hash::make('tttttttt')
             ], [
                 'name' => 'いいい',
                 'email' => 'test2@test.com',
-                'password' => 'tttttttt'
+                'password' => Hash::make('tttttttt')
             ], [
                 'name' => 'ううう',
                 'email' => 'test3@test.com',
-                'password' => 'tttttttt'
+                'password' => Hash::make('tttttttt')
             ], [
-                'name' => 'えええ',
-                'email' => 'test4@test.com',
-                'password' => 'tttttttt'
+                'name' => 'ゲスト',
+                'email' => 'guest@guest.com',
+                'password' => Hash::make('guest123')
             ],
         ]);
     }
